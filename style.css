@@ -200,6 +200,8 @@ nav {
   position: relative;
   display: flex;
   justify-content: center;
+  width: 100%;
+  overflow: hidden;
 }
 
 .menu-glow {
@@ -604,4 +606,41 @@ footer {
 @media (max-width: 480px) {
   .feat-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: 4px; }
+}
+
+@media (max-width: 600px) {
+  body { padding-bottom: 56px; }
+
+  .hero { padding: 28px 0 24px; gap: 12px; }
+  .hero-label { font-size: 10px; padding: 4px 12px; }
+  .hero-sub { font-size: 13px; }
+
+  .preview-section { padding-bottom: 48px; }
+  .preview-label { font-size: 10px; }
+
+  .features-section, .pricing-section { padding: 44px 0; gap: 24px; }
+  .section-title { font-size: 18px; }
+  .section-eyebrow { font-size: 10px; }
+
+  .feat { padding: 14px; gap: 8px; }
+  .feat-name { font-size: 12px; }
+  .feat-desc { font-size: 11px; }
+  .feat-icon { width: 28px; height: 28px; }
+  .feat-icon svg { width: 12px; height: 12px; }
+
+  .plan { padding: 18px; gap: 16px; }
+  .plan-amount { font-size: 28px; }
+  .plan-name { font-size: 10px; }
+  .plan-period { font-size: 11px; }
+  .plan-feature { font-size: 11px; gap: 8px; }
+  .plan-btn { font-size: 12px; padding: 9px 0; }
+
+  footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 20px;
+    gap: 8px;
+  }
+  .footer-note { font-size: 10px; }
 }
