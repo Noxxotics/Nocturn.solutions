@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', function () {
+
 const TABS = [
   { subs: ['General', 'Misc'], panels: ['p-esp-gen', 'p-esp-misc'] },
   { subs: ['Triggerbot'],      panels: ['p-aim'] },
@@ -126,3 +128,5 @@ applyScale();
 // Init
 renderTabBar();
 showPanel();
+
+}); // DOMContentLoaded
