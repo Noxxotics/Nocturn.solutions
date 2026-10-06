@@ -110,19 +110,18 @@ const scaler  = document.getElementById('scaler');
 const espWin  = document.getElementById('esp-win');
 
 function applyScale() {
-  const wide    = window.innerWidth > 900;
-  const BASE_W  = wide ? 1120 : 700; // 700 menu + 20 gap + 400 esp
-  const avail   = Math.min(window.innerWidth - 32, BASE_W);
+  const wide   = window.innerWidth > 900;
+  const BASE_W = wide ? 1120 : 700;
+  const avail  = Math.min(window.innerWidth - 32, BASE_W);
   if (espWin) espWin.hidden = !wide;
+  scaler.style.width = BASE_W + 'px'; // keep natural width — overflow:hidden on parent clips it
   if (avail < BASE_W) {
     const s = avail / BASE_W;
     scaler.style.transform = 'scale(' + s + ')';
     scaler.style.height    = (450 * s) + 'px';
-    scaler.style.width     = (BASE_W * s) + 'px';
   } else {
     scaler.style.transform = '';
     scaler.style.height    = '450px';
-    scaler.style.width     = BASE_W + 'px';
   }
 }
 
