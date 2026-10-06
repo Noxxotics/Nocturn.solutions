@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nocturn — CS2 External ESP</title>
+  <meta name="description" content="Full-featured CS2 external ESP by NoxXotics. Player ESP, triggerbot, radar, chams, config profiles and more.">
+  <meta property="og:title" content="Nocturn — CS2 External ESP">
+  <meta property="og:description" content="Full-featured CS2 external ESP by NoxXotics.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <svg width="20" height="20" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+      <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+      <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+    </svg>
+    <span class="nav-name">NoxXotics</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#pricing" class="nav-cta">Purchase</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-mobile" id="navMobile">
+  <a href="#features" class="nav-mobile-link">Features</a>
+  <a href="#pricing" class="nav-mobile-link">Pricing</a>
+  <a href="#pricing" class="nav-mobile-link accent">Purchase</a>
+</div>
+
+<section class="hero">
+  <span class="hero-label">CS2 External</span>
+  <h1 class="hero-title">Nocturn</h1>
+  <p class="hero-sub">Full-featured external ESP for Counter-Strike 2. Clean interface, automatic offsets, built to last.</p>
+  <span class="hero-by">by <span>NoxXotics</span></span>
+</section>
+
+<section class="preview-section">
+  <span class="preview-label">Interactive Preview</span>
+  <div class="menu-outer">
+    <div class="menu-glow" aria-hidden="true"></div>
+    <div class="menu-scaler" id="scaler">
+      <div class="menu-window" aria-label="Nocturn menu preview">
+
+        <div class="topbar">
+          <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true" style="flex-shrink:0">
+            <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+            <circle cx="19.5" cy="11.5" r="7.5" fill="#0d0d13"/>
+            <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+            <circle cx="27" cy="12" r="1.1" fill="rgba(167,139,250,.5)"/>
+          </svg>
+          <span class="topbar-title">NOCTURN</span>
+          <span class="topbar-vsep" aria-hidden="true"></span>
+          <span class="topbar-sub">CS2 &middot; v1.0</span>
+          <div class="sweep" aria-hidden="true"></div>
+        </div>
+
+        <div class="menu-body">
+          <div class="sidebar" id="sidebar">
+            <div class="stab active" data-tab="0" role="button" tabindex="0" title="Visuals">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm0 12c5.33 0 8 2.67 8 4v2H4v-2c0-1.33 2.67-4 8-4z"/></svg>
+            </div>
+            <div class="stab" data-tab="1" role="button" tabindex="0" title="Aim">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke-width="2" style="stroke:currentColor"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="6" stroke-width="2" style="stroke:currentColor"/><line x1="12" y1="18" x2="12" y2="22" stroke-width="2" style="stroke:currentColor"/><line x1="2" y1="12" x2="6" y2="12" stroke-width="2" style="stroke:currentColor"/><line x1="18" y1="12" x2="22" y2="12" stroke-width="2" style="stroke:currentColor"/></svg>
+            </div>
+            <div class="stab-sep" aria-hidden="true"></div>
+            <div class="stab" data-tab="2" role="button" tabindex="0" title="Misc">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke-width="2" style="stroke:currentColor"/><ellipse cx="12" cy="12" rx="4" ry="10" fill="none" stroke-width="2" style="stroke:currentColor"/><line x1="2" y1="12" x2="22" y2="12" stroke-width="2" style="stroke:currentColor"/></svg>
+            </div>
+            <div class="stab" data-tab="3" role="button" tabindex="0" title="Config">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            </div>
+            <div class="stab" data-tab="4" role="button" tabindex="0" title="Settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+          </div>
+
+          <div class="content">
+            <div class="tabbar" id="tabbar"></div>
+
+            <div class="panel" id="p-esp-gen">
+              <div class="card">
+                <div class="sec"><div class="sec-title">Players</div>
+                  <div class="row"><span class="rlabel">Enable ESP</span><div class="tog on" role="switch" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Boxes</span><div class="chk on" role="checkbox" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Names</span><div class="chk on" role="checkbox" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Weapon</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Health bar</span><div class="chk on" role="checkbox" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Health text</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Skeleton</span><div class="chk on" role="checkbox" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Skel. glow</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Glow intensity</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="0" max="100" value="30" aria-label="Glow intensity"><span class="sld-val">30</span></div>
+                  </div>
+                  <div class="row"><span class="rlabel">Armor</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Tracers</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Filters</div>
+                  <div class="row"><span class="rlabel">Team check</span><div class="chk on" role="checkbox" aria-checked="true" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Spotted only</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                </div>
+                <div class="sec"><div class="sec-title">Chams</div>
+                  <div class="row"><span class="rlabel">Enable</span><div class="tog" role="switch" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Color</span>
+                    <input type="color" value="#8b5cf6" aria-label="Chams color" style="width:80px;height:18px;border-radius:3px;border:1px solid rgba(90,40,255,.3);background:none;cursor:pointer;padding:0 2px;">
+                  </div>
+                </div>
+                <div class="sec"><div class="sec-title">Glow</div>
+                  <div class="row"><span class="rlabel">Enable glow</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Intensity</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="0" max="100" value="50" aria-label="Glow intensity"><span class="sld-val">50</span></div>
+                  </div>
+                </div>
+                <div class="sec"><div class="sec-title">Snaplines</div>
+                  <div class="row"><span class="rlabel">Enable</span><div class="chk" role="checkbox" aria-checked="false" tabindex="0"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="p-esp-misc" hidden>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Grenades</div>
+                  <div class="row"><span class="rlabel">Grenade ESP</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Show timer</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Smoke</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Molotov</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">HE grenade</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Flashbang</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">World</div>
+                  <div class="row"><span class="rlabel">Dropped guns</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Bomb ESP</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Bomb timer</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="p-aim" hidden>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Triggerbot</div>
+                  <div class="row"><span class="rlabel">Enable</span><div class="tog" role="switch" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Team check</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Delay (ms)</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="0" max="500" value="50" aria-label="Delay"><span class="sld-val">50</span></div>
+                  </div>
+                  <div class="row"><span class="rlabel">Shot interval (ms)</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="0" max="500" value="100" aria-label="Shot interval"><span class="sld-val">100</span></div>
+                  </div>
+                  <div class="row"><span class="rlabel">Hold key</span>
+                    <span style="color:var(--dim);font-size:11px;margin-right:8px">Always</span>
+                    <button class="nbtn">Set</button>
+                  </div>
+                </div>
+                <div class="sec"><div class="sec-title">Filters</div>
+                  <div class="row"><span class="rlabel">Visible only</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Scoped only</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Hitbox</div>
+                  <div class="row"><span class="rlabel">Head</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Neck</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Chest</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Stomach</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Arms</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Legs</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="p-misc" hidden>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Radar</div>
+                  <div class="row"><span class="rlabel">Enable radar</span><div class="tog on" role="switch" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Show all</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+                <div class="sec"><div class="sec-title">Crosshair</div>
+                  <div class="row"><span class="rlabel">Sniper dot</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Size</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="1" max="64" value="8" aria-label="Size"><span class="sld-val">8</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Overlay</div>
+                  <div class="row"><span class="rlabel">Watermark</span><div class="tog on" role="switch" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Lobby cards</span><div class="tog on" role="switch" tabindex="0"></div></div>
+                  <div class="btn-row" style="padding-top:6px">
+                    <button class="nbtn" style="flex:1;text-align:center">Preview Cards</button>
+                  </div>
+                </div>
+                <div class="sec"><div class="sec-title">Spotify</div>
+                  <div class="row"><span class="rlabel">Enabled</span><div class="tog" role="switch" tabindex="0"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="p-config" hidden>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Profiles</div>
+                  <div class="cfg-list">
+                    <div class="cfg-item loaded sel">&nbsp;&gt;&nbsp;Default</div>
+                    <div class="cfg-item">&nbsp;&nbsp;&nbsp;Legit</div>
+                    <div class="cfg-item">&nbsp;&nbsp;&nbsp;Rage</div>
+                  </div>
+                  <div class="cfg-input-row"><input type="text" class="cfg-input" value="Default" aria-label="Config name"></div>
+                  <div class="btn-row">
+                    <button class="nbtn">Load</button>
+                    <button class="nbtn">Save</button>
+                    <button class="nbtn danger">Delete</button>
+                  </div>
+                </div>
+                <div class="sec"><div class="sec-title">Share</div>
+                  <p class="cfg-hint">Export fills this box &middot; paste to import</p>
+                  <div class="cfg-textarea-row"><textarea class="cfg-textarea" placeholder="Paste config code here..." aria-label="Config code"></textarea></div>
+                  <div class="btn-row">
+                    <button class="nbtn">Export</button>
+                    <button class="nbtn">Import</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Keybinds</div>
+                  <div class="krow"><span class="krow-label">Menu toggle</span><span class="krow-val">Insert</span><button class="nbtn" style="margin-left:8px">Change</button></div>
+                  <div class="krow"><span class="krow-label">Panic key</span><span class="krow-val">END</span></div>
+                </div>
+                <div class="sec"><div class="sec-title">About</div>
+                  <div class="krow"><span class="krow-label">Version</span><span class="krow-val">v1.0 &middot; CS2 x64</span></div>
+                  <div class="krow"><span class="krow-label">Author</span><span class="krow-val">NoxXotics</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="p-settings" hidden>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Performance</div>
+                  <div class="row"><span class="rlabel">Limit FPS</span><div class="tog" role="switch" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">FPS cap</span>
+                    <div class="sld-wrap"><input type="range" class="sld" min="30" max="360" value="144" aria-label="FPS cap"><span class="sld-val">144</span></div>
+                  </div>
+                  <div class="row"><span class="rlabel">Free CPU sleep</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="sec"><div class="sec-title">Display</div>
+                  <div class="row"><span class="rlabel">Watermark</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">Streamproof</span><div class="chk" role="checkbox" tabindex="0"></div></div>
+                  <div class="row"><span class="rlabel">VSync</span><div class="chk on" role="checkbox" tabindex="0"></div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="features-section" id="features">
+  <div class="section-heading">
+    <span class="section-eyebrow">What's included</span>
+    <h2 class="section-title">Everything in one build</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></div>
+      <div class="feat-name">Player ESP</div>
+      <div class="feat-desc">Boxes, names, health bar, skeleton, glow, chams, armor, and tracers — each toggleable.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke-width="2" style="stroke:currentColor"/><circle cx="12" cy="12" r="2.5"/><line x1="12" y1="2" x2="12" y2="5" stroke-width="2" style="stroke:currentColor"/><line x1="12" y1="19" x2="12" y2="22" stroke-width="2" style="stroke:currentColor"/><line x1="2" y1="12" x2="5" y2="12" stroke-width="2" style="stroke:currentColor"/><line x1="19" y1="12" x2="22" y2="12" stroke-width="2" style="stroke:currentColor"/></svg></div>
+      <div class="feat-name">Triggerbot</div>
+      <div class="feat-desc">Per-hitbox selection, delay and interval control, hold-key binding, visible and scoped filters.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+      <div class="feat-name">World ESP</div>
+      <div class="feat-desc">Grenade timers, bomb timer, dropped weapons, sniper dot, and radar overlay.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+      <div class="feat-name">Config System</div>
+      <div class="feat-desc">Multiple named profiles with export/import share codes. Switch setups instantly.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.72L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg></div>
+      <div class="feat-name">Auto Offsets</div>
+      <div class="feat-desc">Automatic offset scanning on launch. Survives most CS2 updates without a manual patch.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
+      <div class="feat-name">Spotify Overlay</div>
+      <div class="feat-desc">Live track name and album art displayed in-overlay while you play.</div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="pricing-section" id="pricing">
+  <div class="section-heading">
+    <span class="section-eyebrow">Pricing</span>
+    <h2 class="section-title">Pick your plan</h2>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <div>
+        <div class="plan-name">Weekly</div>
+        <div class="plan-price">
+          <span class="plan-currency">$</span>
+          <span class="plan-amount">7</span>
+          <span class="plan-period">/ 7 days</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Full ESP suite</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Triggerbot</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Auto offsets</li>
+        <li class="plan-feature muted"><span class="plan-feature-dot"></span>Config profiles</li>
+        <li class="plan-feature muted"><span class="plan-feature-dot"></span>Spotify overlay</li>
+      </ul>
+      <button class="plan-btn outline">Purchase</button>
+    </div>
+    <div class="plan featured">
+      <span class="plan-badge">Popular</span>
+      <div>
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">
+          <span class="plan-currency">$</span>
+          <span class="plan-amount">20</span>
+          <span class="plan-period">/ 30 days</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Full ESP suite</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Triggerbot</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Auto offsets</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Config profiles</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Spotify overlay</li>
+      </ul>
+      <button class="plan-btn solid">Purchase</button>
+    </div>
+    <div class="plan">
+      <div>
+        <div class="plan-name">Lifetime</div>
+        <div class="plan-price">
+          <span class="plan-currency">$</span>
+          <span class="plan-amount">60</span>
+          <span class="plan-period">one time</span>
+        </div>
+      </div>
+      <ul class="plan-features">
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Full ESP suite</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Triggerbot</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Auto offsets</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Config profiles</li>
+        <li class="plan-feature"><span class="plan-feature-dot"></span>Spotify overlay</li>
+      </ul>
+      <button class="plan-btn outline">Purchase</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">
+    <svg width="16" height="16" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+      <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+    </svg>
+    <span class="footer-name">NoxXotics</span>
+  </div>
+  <span class="footer-note">&copy; 2025 NoxXotics &middot; All rights reserved</span>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

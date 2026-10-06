@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Nocturn</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --accent: #5a28ff; --accent-bright: #c4b5fd; --dim: #737387; --page-bg: #06060c; color-scheme: dark; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      background: var(--page-bg);
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+      gap: 20px;
+      padding: 32px 16px;
+      text-align: center;
+    }
+    .code {
+      color: var(--accent-bright);
+      font-size: 80px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+    .msg {
+      color: var(--dim);
+      font-size: 14px;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 8px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 22px;
+      border-radius: 6px;
+      transition: opacity 0.15s;
+    }
+    .back:hover { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="code">404</div>
+  <p class="msg">Page not found.</p>
+  <a href="/" class="back">Back to home</a>
+</body>
+</html>
