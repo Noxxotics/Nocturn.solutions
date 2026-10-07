@@ -66,11 +66,11 @@
     <form class="auth-form" id="loginForm" autocomplete="off">
       <div class="auth-field">
         <label for="loginUser">Username</label>
-        <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off" required>
+        <input type="text" id="loginUser" name="username" placeholder="Enter username" autocomplete="off" required>
       </div>
       <div class="auth-field">
         <label for="loginPass">Password</label>
-        <input type="password" id="loginPass" placeholder="Enter password" autocomplete="off" required>
+        <input type="password" id="loginPass" name="password" placeholder="Enter password" autocomplete="off" required>
       </div>
       <div class="auth-msg" id="loginMsg" hidden></div>
       <button type="submit" class="checkout-pay-btn" id="loginSubmit">
@@ -83,15 +83,15 @@
     <form class="auth-form" id="registerForm" autocomplete="off" hidden>
       <div class="auth-field">
         <label for="regUser">Username</label>
-        <input type="text" id="regUser" placeholder="Choose a username" autocomplete="off" required>
+        <input type="text" id="regUser" name="username" placeholder="Choose a username" autocomplete="off" required>
       </div>
       <div class="auth-field">
         <label for="regPass">Password</label>
-        <input type="password" id="regPass" placeholder="Choose a password" autocomplete="off" required>
+        <input type="password" id="regPass" name="password" placeholder="Choose a password" autocomplete="off" required>
       </div>
       <div class="auth-field">
         <label for="regEmail">Email</label>
-        <input type="email" id="regEmail" placeholder="Enter your email" autocomplete="off" required>
+        <input type="email" id="regEmail" name="email" placeholder="Enter your email" autocomplete="off" required>
       </div>
       <div class="auth-msg" id="registerMsg" hidden></div>
       <button type="submit" class="checkout-pay-btn" id="registerSubmit">

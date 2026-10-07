@@ -341,8 +341,9 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Auth Modal ──────────────────────────────────────────────────────
-const KEYAUTH = { name: 'Vanta', ownerid: 'htid7JIX5o', ver: '1.0' };
-const KEYAUTH_URL = 'https://keyauth.win/api/1.3/';
+// Requests go to the Cloudflare Worker proxy — credentials never leave the worker.
+// Deploy worker.js to Cloudflare Workers and set PROXY_URL to your worker's URL.
+const PROXY_URL = 'https://nocturn-auth.YOUR-SUBDOMAIN.workers.dev';
 const authOverlay   = document.getElementById('authOverlay');
 const authClose     = document.getElementById('authClose');
 const loginForm     = document.getElementById('loginForm');
@@ -396,11 +397,10 @@ function setMsg(el, text, isError) {
 }
 
 async function keyauthPost(params) {
-  const body = new URLSearchParams({ ...params, ...KEYAUTH });
-  const res  = await fetch(KEYAUTH_URL, {
+  const res = await fetch(PROXY_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params),
   });
   return res.json();
 }
