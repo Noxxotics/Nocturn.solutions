@@ -11,7 +11,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>[hidden]{display:none!important}</style>
 </head>
@@ -19,18 +19,18 @@
 
 <nav>
   <div class="nav-brand">
-    <svg width="20" height="20" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 28 28" fill="none" aria-hidden="true">
       <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
       <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
       <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
     </svg>
-    <span class="nav-name">NoxXotics</span>
+    <span class="nav-name">Nocturn</span>
   </div>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
-    <li><button class="nav-auth-btn" id="navLoginBtn">Login</button></li>
-    <li><a href="#pricing" class="nav-cta">Purchase</a></li>
+    <li><button class="nav-auth-btn" id="navLoginBtn">Sign in</button></li>
+    <li><a href="#pricing" class="nav-cta">Get started</a></li>
   </ul>
   <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu">
     <span></span><span></span><span></span>
@@ -40,8 +40,8 @@
 <div class="nav-mobile" id="navMobile">
   <a href="#features" class="nav-mobile-link">Features</a>
   <a href="#pricing" class="nav-mobile-link">Pricing</a>
-  <button class="nav-mobile-link accent" id="navLoginBtnMobile">Login / Register</button>
-  <a href="#pricing" class="nav-mobile-link accent">Purchase</a>
+  <button class="nav-mobile-link accent" id="navLoginBtnMobile">Sign in</button>
+  <a href="#pricing" class="nav-mobile-link accent">Get started</a>
 </div>
 
 <!-- Auth Modal -->
@@ -114,14 +114,17 @@
 </div>
 
 <section class="hero">
-  <span class="hero-label">CS2 External</span>
+  <p class="hero-eyebrow">CS2 external</p>
   <h1 class="hero-title">Nocturn</h1>
   <p class="hero-sub">Full-featured external ESP for Counter-Strike 2. Clean interface, automatic offsets, built to last.</p>
-  <span class="hero-by">by <span>NoxXotics</span></span>
+  <div class="hero-actions">
+    <a href="#pricing" class="hero-btn-primary">Get started</a>
+    <a href="#features" class="hero-btn-ghost">See features</a>
+  </div>
 </section>
 
 <section class="preview-section">
-  <span class="preview-label">Interactive Preview</span>
+  <span class="preview-label">Live preview</span>
   <div class="menu-outer">
     <div class="menu-glow" aria-hidden="true"></div>
     <div class="menu-scaler" id="scaler">
@@ -353,7 +356,7 @@
 
 <section class="features-section" id="features">
   <div class="section-heading">
-    <span class="section-eyebrow">What's included</span>
+    <span class="section-label">What's included</span>
     <h2 class="section-title">Everything in one build</h2>
   </div>
   <div class="feat-grid">
@@ -394,7 +397,7 @@
 
 <section class="pricing-section" id="pricing">
   <div class="section-heading">
-    <span class="section-eyebrow">Pricing</span>
+    <span class="section-label">Pricing</span>
     <h2 class="section-title">Pick your plan</h2>
   </div>
   <div class="plans">
@@ -473,9 +476,9 @@
       <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
       <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
     </svg>
-    <span class="footer-name">NoxXotics</span>
+    <span class="footer-name">Nocturn</span>
   </div>
-  <span class="footer-note">&copy; 2025 NoxXotics &middot; All rights reserved</span>
+  <span class="footer-note">&copy; 2025 NoxXotics</span>
 </footer>
 
 <script src="main.js"></script>
