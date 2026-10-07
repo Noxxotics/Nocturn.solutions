@@ -21,8 +21,9 @@
 /* ── Reset ─────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 html, body { height: 100%; }
+body { overflow-x: hidden; }
 
 body {
   background: var(--page-bg);
@@ -793,21 +794,10 @@ footer {
   .feat-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: 4px; }
 
-  /* Menu preview: scroll horizontally on phones */
-  .preview-section { padding-bottom: 32px; }
-  .menu-outer {
-    overflow-x: auto;
-    overflow-y: hidden;
-    justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    padding: 0 16px 12px;
-  }
-  .menu-scaler {
-    transform: none !important;
-    height: auto !important;
-    width: max-content;
-  }
+  /* Menu preview on phones — scale to fit, no sideways scroll */
+  .preview-section { padding-bottom: 32px; overflow: hidden; }
+  .menu-outer { overflow: hidden; }
+  .menu-scaler { transform-origin: top center; }
 
   /* Modals — full-screen sheet on small phones */
   .auth-overlay,
