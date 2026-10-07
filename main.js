@@ -338,6 +338,7 @@ document.addEventListener('keydown', e => {
 
 // ── Auth Modal ──────────────────────────────────────────────────────
 const KEYAUTH = { name: 'Vanta', ownerid: 'htid7JIX5o', ver: '1.0' };
+const KEYAUTH_URL = 'https://keyauth.win/api/1.3/';
 const authOverlay   = document.getElementById('authOverlay');
 const authClose     = document.getElementById('authClose');
 const loginForm     = document.getElementById('loginForm');
@@ -392,7 +393,7 @@ function setMsg(el, text, isError) {
 
 async function keyauthPost(params) {
   const body = new URLSearchParams({ ...params, ...KEYAUTH });
-  const res  = await fetch('https://keyauth.win/api/1.2/', {
+  const res  = await fetch(KEYAUTH_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
@@ -452,16 +453,15 @@ loginForm?.addEventListener('submit', async e => {
 // Register
 registerForm?.addEventListener('submit', async e => {
   e.preventDefault();
-  const u   = registerForm.querySelector('[name=username]').value.trim();
-  const p   = registerForm.querySelector('[name=password]').value;
-  const key = registerForm.querySelector('[name=license]').value.trim();
-  const em  = registerForm.querySelector('[name=email]').value.trim();
+  const u  = registerForm.querySelector('[name=username]').value.trim();
+  const p  = registerForm.querySelector('[name=password]').value;
+  const em = registerForm.querySelector('[name=email]').value.trim();
   const btn = document.getElementById('registerSubmit');
   btn.disabled = true;
   btn.textContent = 'Registering…';
   setMsg(registerMsg, '', false);
   try {
-    const r = await keyauthPost({ type: 'register', username: u, pass: p, key, email: em });
+    const r = await keyauthPost({ type: 'register', username: u, pass: p, key: '', email: em });
     if (r.success) {
       sessionStorage.setItem('nc_user', JSON.stringify({ username: u, subscriptions: 'Active' }));
       showLoggedIn(u, 'Active');
