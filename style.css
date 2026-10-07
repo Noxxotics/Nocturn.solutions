@@ -111,7 +111,7 @@ nav {
 .nav-mobile {
   display: none;
   flex-direction: column;
-  width: 100%;
+  width: calc(100vw - 32px);
   max-width: 900px;
   background: #0c0c14;
   border: 1px solid var(--border);
@@ -119,6 +119,8 @@ nav {
   overflow: hidden;
   margin-top: -8px;
   margin-bottom: 16px;
+  position: relative;
+  z-index: 100;
 }
 
 .nav-mobile.open { display: flex; }
