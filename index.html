@@ -29,6 +29,7 @@
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><button class="nav-auth-btn" id="navLoginBtn">Login</button></li>
     <li><a href="#pricing" class="nav-cta">Purchase</a></li>
   </ul>
   <button class="nav-hamburger" id="navToggle" aria-label="Toggle menu">
@@ -39,7 +40,81 @@
 <div class="nav-mobile" id="navMobile">
   <a href="#features" class="nav-mobile-link">Features</a>
   <a href="#pricing" class="nav-mobile-link">Pricing</a>
+  <button class="nav-mobile-link accent" id="navLoginBtnMobile">Login / Register</button>
   <a href="#pricing" class="nav-mobile-link accent">Purchase</a>
+</div>
+
+<!-- Auth Modal -->
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" id="authModal">
+    <button class="checkout-close" id="authClose" aria-label="Close">&times;</button>
+    <div class="auth-header">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+        <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+        <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+      </svg>
+      <span class="checkout-brand">Nocturn</span>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="login">Login</button>
+      <button class="auth-tab" data-auth="register">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <form class="auth-form" id="loginForm" autocomplete="off">
+      <div class="auth-field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" placeholder="Enter password" autocomplete="off" required>
+      </div>
+      <div class="auth-msg" id="loginMsg" hidden></div>
+      <button type="submit" class="checkout-pay-btn" id="loginSubmit">
+        <span>Login</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form class="auth-form" id="registerForm" autocomplete="off" hidden>
+      <div class="auth-field">
+        <label for="regUser">Username</label>
+        <input type="text" id="regUser" placeholder="Choose a username" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="regPass">Password</label>
+        <input type="password" id="regPass" placeholder="Choose a password" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="regKey">License Key</label>
+        <input type="text" id="regKey" placeholder="Enter your license key" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" placeholder="Enter your email" autocomplete="off" required>
+      </div>
+      <div class="auth-msg" id="registerMsg" hidden></div>
+      <button type="submit" class="checkout-pay-btn" id="registerSubmit">
+        <span>Create Account</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </form>
+
+    <!-- Logged In State -->
+    <div class="auth-loggedin" id="authLoggedIn" hidden>
+      <div class="auth-welcome">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="var(--accent-mid)"><path d="M12 2a5 5 0 1 1 0 10A5 5 0 0 1 12 2zm0 12c5.33 0 8 2.67 8 4v2H4v-2c0-1.33 2.67-4 8-4z"/></svg>
+        <span id="authWelcomeName">Welcome back</span>
+      </div>
+      <div class="auth-sub">Subscription: <span id="authSubLevel" class="auth-sub-val">—</span></div>
+      <button class="plan-btn outline" id="authLogoutBtn" style="margin-top:16px">Logout</button>
+    </div>
+
+  </div>
 </div>
 
 <section class="hero">

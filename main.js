@@ -336,4 +336,150 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
 
+// ── Auth Modal ──────────────────────────────────────────────────────
+const KEYAUTH = { name: 'Vanta', ownerid: 'htid7JIX5o', ver: '1.0' };
+const authOverlay   = document.getElementById('authOverlay');
+const authClose     = document.getElementById('authClose');
+const loginForm     = document.getElementById('loginForm');
+const registerForm  = document.getElementById('registerForm');
+const authLoggedIn  = document.getElementById('authLoggedIn');
+const loginMsg      = document.getElementById('loginMsg');
+const registerMsg   = document.getElementById('registerMsg');
+const authWelcome   = document.getElementById('authWelcomeName');
+const authSubLevel  = document.getElementById('authSubLevel');
+const authLogoutBtn = document.getElementById('authLogoutBtn');
+
+let authSession = null;
+
+function openAuthModal() {
+  const stored = sessionStorage.getItem('nc_user');
+  if (stored) {
+    const u = JSON.parse(stored);
+    showLoggedIn(u.username, u.subscriptions);
+  } else {
+    showAuthForm('login');
+  }
+  authOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeAuthModal() {
+  authOverlay.hidden = true;
+  document.body.style.overflow = '';
+}
+
+function showAuthForm(tab) {
+  loginForm.hidden    = tab !== 'login';
+  registerForm.hidden = tab !== 'register';
+  authLoggedIn.hidden = true;
+  document.querySelectorAll('.auth-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.auth === tab);
+  });
+}
+
+function showLoggedIn(username, subs) {
+  loginForm.hidden    = true;
+  registerForm.hidden = true;
+  authLoggedIn.hidden = false;
+  authWelcome.textContent  = username;
+  authSubLevel.textContent = subs || 'Active';
+}
+
+function setMsg(el, text, isError) {
+  el.textContent = text;
+  el.className   = 'auth-msg ' + (isError ? 'error' : 'success');
+}
+
+async function keyauthPost(params) {
+  const body = new URLSearchParams({ ...params, ...KEYAUTH });
+  const res  = await fetch('https://keyauth.win/api/1.2/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+  });
+  return res.json();
+}
+
+function hwid() {
+  let id = localStorage.getItem('nc_hwid');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('nc_hwid', id);
+  }
+  return id;
+}
+
+// Nav buttons
+['navLoginBtn','navLoginBtnMobile'].forEach(id => {
+  document.getElementById(id)?.addEventListener('click', openAuthModal);
+});
+
+// Auth close
+authClose?.addEventListener('click', closeAuthModal);
+authOverlay?.addEventListener('click', e => { if (e.target === authOverlay) closeAuthModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !authOverlay?.hidden) closeAuthModal(); });
+
+// Tab switch
+document.querySelectorAll('.auth-tab').forEach(btn => {
+  btn.addEventListener('click', () => showAuthForm(btn.dataset.auth));
+});
+
+// Login
+loginForm?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const u = loginForm.querySelector('[name=username]').value.trim();
+  const p = loginForm.querySelector('[name=password]').value;
+  const btn = document.getElementById('loginSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+  setMsg(loginMsg, '', false);
+  try {
+    const r = await keyauthPost({ type: 'login', username: u, pass: p, hwid: hwid() });
+    if (r.success) {
+      const subs = r.info?.subscriptions?.[0]?.subscription || 'Active';
+      sessionStorage.setItem('nc_user', JSON.stringify({ username: u, subscriptions: subs }));
+      showLoggedIn(u, subs);
+    } else {
+      setMsg(loginMsg, r.message || 'Login failed.', true);
+    }
+  } catch {
+    setMsg(loginMsg, 'Connection error. Try again.', true);
+  }
+  btn.disabled = false;
+  btn.textContent = 'Login';
+});
+
+// Register
+registerForm?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const u   = registerForm.querySelector('[name=username]').value.trim();
+  const p   = registerForm.querySelector('[name=password]').value;
+  const key = registerForm.querySelector('[name=license]').value.trim();
+  const em  = registerForm.querySelector('[name=email]').value.trim();
+  const btn = document.getElementById('registerSubmit');
+  btn.disabled = true;
+  btn.textContent = 'Registering…';
+  setMsg(registerMsg, '', false);
+  try {
+    const r = await keyauthPost({ type: 'register', username: u, pass: p, key, email: em });
+    if (r.success) {
+      sessionStorage.setItem('nc_user', JSON.stringify({ username: u, subscriptions: 'Active' }));
+      showLoggedIn(u, 'Active');
+    } else {
+      setMsg(registerMsg, r.message || 'Registration failed.', true);
+    }
+  } catch {
+    setMsg(registerMsg, 'Connection error. Try again.', true);
+  }
+  btn.disabled = false;
+  btn.textContent = 'Create Account';
+});
+
+// Logout
+authLogoutBtn?.addEventListener('click', () => {
+  sessionStorage.removeItem('nc_user');
+  showAuthForm('login');
+  loginMsg.textContent = '';
+});
+
 }); // DOMContentLoaded
