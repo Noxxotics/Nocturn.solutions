@@ -110,11 +110,20 @@ const scaler  = document.getElementById('scaler');
 const espWin  = document.getElementById('esp-win');
 
 function applyScale() {
-  const wide   = window.innerWidth > 900;
+  const vw     = window.innerWidth;
+  const wide   = vw > 900;
+  const mobile = vw <= 480;
   const BASE_W = wide ? 1120 : 700;
-  const avail  = Math.min(window.innerWidth - 32, BASE_W);
+  const avail  = Math.min(vw - 32, BASE_W);
   if (espWin) espWin.hidden = !wide;
-  scaler.style.width = BASE_W + 'px'; // keep natural width — overflow:hidden on parent clips it
+  if (mobile) {
+    // let CSS handle it — horizontal scroll, no transform
+    scaler.style.transform = '';
+    scaler.style.height    = '';
+    scaler.style.width     = '';
+    return;
+  }
+  scaler.style.width = BASE_W + 'px';
   if (avail < BASE_W) {
     const s = avail / BASE_W;
     scaler.style.transform = 'scale(' + s + ')';

@@ -793,6 +793,22 @@ footer {
   .feat-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: 4px; }
 
+  /* Menu preview: scroll horizontally on phones */
+  .preview-section { padding-bottom: 32px; }
+  .menu-outer {
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 0 16px 12px;
+  }
+  .menu-scaler {
+    transform: none !important;
+    height: auto !important;
+    width: max-content;
+  }
+
   /* Modals — full-screen sheet on small phones */
   .auth-overlay,
   .checkout-overlay {
