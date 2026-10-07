@@ -326,32 +326,14 @@
     <span class="section-eyebrow">Pricing</span>
     <h2 class="section-title">Pick your plan</h2>
   </div>
-  <div class="plans">
-    <div class="plan">
-      <div>
-        <div class="plan-name">Weekly</div>
-        <div class="plan-price">
-          <span class="plan-currency">$</span>
-          <span class="plan-amount">7</span>
-          <span class="plan-period">/ 7 days</span>
-        </div>
-      </div>
-      <ul class="plan-features">
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Full ESP suite</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Triggerbot</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Auto offsets</li>
-        <li class="plan-feature muted"><span class="plan-feature-dot"></span>Config profiles</li>
-        <li class="plan-feature muted"><span class="plan-feature-dot"></span>Spotify overlay</li>
-      </ul>
-      <button class="plan-btn outline">Purchase</button>
-    </div>
+  <div class="plans plans-center">
     <div class="plan featured">
-      <span class="plan-badge">Popular</span>
+      <span class="plan-badge">Available Now</span>
       <div>
         <div class="plan-name">Monthly</div>
         <div class="plan-price">
           <span class="plan-currency">$</span>
-          <span class="plan-amount">20</span>
+          <span class="plan-amount">3</span>
           <span class="plan-period">/ 30 days</span>
         </div>
       </div>
@@ -362,28 +344,39 @@
         <li class="plan-feature"><span class="plan-feature-dot"></span>Config profiles</li>
         <li class="plan-feature"><span class="plan-feature-dot"></span>Spotify overlay</li>
       </ul>
-      <button class="plan-btn solid">Purchase</button>
-    </div>
-    <div class="plan">
-      <div>
-        <div class="plan-name">Lifetime</div>
-        <div class="plan-price">
-          <span class="plan-currency">$</span>
-          <span class="plan-amount">60</span>
-          <span class="plan-period">one time</span>
-        </div>
-      </div>
-      <ul class="plan-features">
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Full ESP suite</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Triggerbot</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Auto offsets</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Config profiles</li>
-        <li class="plan-feature"><span class="plan-feature-dot"></span>Spotify overlay</li>
-      </ul>
-      <button class="plan-btn outline">Purchase</button>
+      <button class="plan-btn solid" data-plan="Monthly" data-price="$3 / 30 days" data-url="https://payhip.com/b/Idtus">Purchase</button>
     </div>
   </div>
 </section>
+
+<!-- Checkout Modal -->
+<div class="checkout-overlay" id="checkoutOverlay" hidden>
+  <div class="checkout-modal" id="checkoutModal">
+    <button class="checkout-close" id="checkoutClose" aria-label="Close">&times;</button>
+    <div class="checkout-header">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+        <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+        <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+      </svg>
+      <span class="checkout-brand">Nocturn</span>
+    </div>
+    <div class="checkout-plan-name" id="checkoutPlanName">Monthly</div>
+    <div class="checkout-plan-price" id="checkoutPlanPrice">$3 / 30 days</div>
+    <ul class="checkout-features">
+      <li><span class="plan-feature-dot"></span>Full ESP suite</li>
+      <li><span class="plan-feature-dot"></span>Triggerbot</li>
+      <li><span class="plan-feature-dot"></span>Auto offsets</li>
+      <li><span class="plan-feature-dot"></span>Config profiles</li>
+      <li><span class="plan-feature-dot"></span>Spotify overlay</li>
+    </ul>
+    <a class="checkout-pay-btn" id="checkoutPayBtn" href="#" target="_blank" rel="noopener">
+      Continue to Payment
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    </a>
+    <p class="checkout-note">Secure checkout via Payhip &middot; Instant delivery</p>
+  </div>
+</div>
 
 <footer>
   <div class="footer-brand">

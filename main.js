@@ -306,4 +306,34 @@ if (espCanvas) {
 renderTabBar();
 showPanel();
 
+// ── Checkout Modal ───────────────────────────────────────────────
+const overlay      = document.getElementById('checkoutOverlay');
+const checkoutClose = document.getElementById('checkoutClose');
+const planNameEl   = document.getElementById('checkoutPlanName');
+const planPriceEl  = document.getElementById('checkoutPlanPrice');
+const payBtn       = document.getElementById('checkoutPayBtn');
+
+document.querySelectorAll('.plan-btn[data-url]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    planNameEl.textContent  = btn.dataset.plan;
+    planPriceEl.textContent = btn.dataset.price;
+    payBtn.href             = btn.dataset.url;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeModal() {
+  overlay.hidden = true;
+  document.body.style.overflow = '';
+}
+
+checkoutClose.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => {
+  if (e.target === overlay) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
 }); // DOMContentLoaded
