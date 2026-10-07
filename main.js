@@ -115,14 +115,17 @@ function applyScale() {
   const BASE_W = wide ? 1120 : 700;
   const avail  = Math.min(vw - 32, BASE_W);
   if (espWin) espWin.hidden = !wide;
-  scaler.style.width = BASE_W + 'px';
+  scaler.style.width          = BASE_W + 'px';
+  scaler.style.transformOrigin = 'top left';
   if (avail < BASE_W) {
     const s = avail / BASE_W;
-    scaler.style.transform = 'scale(' + s + ')';
-    scaler.style.height    = (450 * s) + 'px';
+    scaler.style.transform  = 'scale(' + s + ')';
+    scaler.style.marginRight = (BASE_W * (s - 1)) + 'px'; // collapse the space the scaled-down element leaves
+    scaler.style.height      = (450 * s) + 'px';
   } else {
-    scaler.style.transform = '';
-    scaler.style.height    = '450px';
+    scaler.style.transform   = '';
+    scaler.style.marginRight = '';
+    scaler.style.height      = '450px';
   }
 }
 
