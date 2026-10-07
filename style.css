@@ -135,6 +135,11 @@ nav {
 .nav-mobile-link:last-child { border-bottom: none; }
 .nav-mobile-link:hover { color: var(--label); background: rgba(90,40,255,0.05); }
 .nav-mobile-link.accent { color: var(--accent-tab); }
+button.nav-mobile-link {
+  width: 100%; text-align: left; background: none; border: none;
+  border-bottom: 1px solid var(--border);
+  font-family: inherit; cursor: pointer;
+}
 
 /* ── Hero ──────────────────────────────────────────────────────── */
 .hero {
@@ -787,6 +792,34 @@ footer {
 @media (max-width: 480px) {
   .feat-grid { grid-template-columns: 1fr; }
   .hero-title { letter-spacing: 4px; }
+
+  /* Modals — full-screen sheet on small phones */
+  .auth-overlay,
+  .checkout-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .auth-modal,
+  .checkout-modal {
+    border-radius: 18px 18px 0 0;
+    max-width: 100%;
+    padding: 24px 20px 32px;
+    animation: sheetIn 0.22s ease;
+  }
+
+  @keyframes sheetIn {
+    from { transform: translateY(100%); opacity: 0.6; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .auth-field input {
+    font-size: 16px; /* prevents iOS auto-zoom */
+    padding: 11px 12px;
+  }
+
+  .checkout-plan-price { font-size: 26px; }
+  .checkout-pay-btn { font-size: 15px; padding: 14px 0; }
 }
 
 @media (max-width: 600px) {
