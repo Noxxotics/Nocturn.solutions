@@ -16,15 +16,26 @@ function hwid() {
 }
 
 function getSession() {
-  try { return JSON.parse(sessionStorage.getItem('nc_user')); } catch { return null; }
+  try {
+    return JSON.parse(localStorage.getItem('nc_user')) ||
+           JSON.parse(sessionStorage.getItem('nc_user'));
+  } catch { return null; }
 }
 
-function setSession(data) {
-  sessionStorage.setItem('nc_user', JSON.stringify(data));
+function setSession(data, remember) {
+  const str = JSON.stringify(data);
+  if (remember) {
+    localStorage.setItem('nc_user', str);
+    sessionStorage.removeItem('nc_user');
+  } else {
+    sessionStorage.setItem('nc_user', str);
+    localStorage.removeItem('nc_user');
+  }
 }
 
 function clearSession() {
   sessionStorage.removeItem('nc_user');
+  localStorage.removeItem('nc_user');
 }
 
 async function proxyPost(params) {
@@ -129,7 +140,8 @@ async function fetchInfo(username, pass) {
       populateInfo(info);
       // cache the fresh info in session
       const session = getSession();
-      if (session) setSession({ ...session, info });
+      const persisted = !!localStorage.getItem('nc_user');
+      if (session) setSession({ ...session, info }, persisted);
     }
   } catch {
     // silent — already populated from cache above
@@ -210,11 +222,12 @@ loginForm?.addEventListener('submit', async e => {
   const btn = document.getElementById('loginSubmit');
   btn.disabled = true;
   btn.querySelector('span').textContent = 'Logging in…';
+  const remember = document.getElementById('loginRemember')?.checked || false;
   try {
     const r = await proxyPost({ type: 'login', username: u, pass: p, hwid: hwid() });
     if (r.success) {
       const sub = r.info?.subscriptions?.[0]?.subscription || 'Active';
-      setSession({ username: u, pass: p, subscriptions: sub, info: r.info || null });
+      setSession({ username: u, pass: p, subscriptions: sub, info: r.info || null }, remember);
       closeAuth();
       showDashboard(getSession());
     } else {
