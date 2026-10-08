@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nocturn — Panel</title>
+  <meta name="description" content="Nocturn customer panel — manage your license, download the loader, reset HWID.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Panel-specific styles ────────────────────────────────────── */
+    .panel-wrap {
+      width: 100%;
+      max-width: 760px;
+      padding: 0 24px;
+      margin-top: 12px;
+    }
+
+    /* Gate — shown when not logged in */
+    .panel-gate {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .panel-gate-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #13131f;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-gate h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--sec-title);
+    }
+    .panel-gate p {
+      color: var(--dim);
+      font-size: 14px;
+      max-width: 320px;
+      line-height: 1.6;
+    }
+    .panel-gate-btn {
+      margin-top: 4px;
+      padding: 10px 28px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .panel-gate-btn:hover { background: var(--accent-mid); }
+
+    /* Dashboard — shown when logged in */
+    .panel-dashboard { display: flex; flex-direction: column; gap: 20px; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .panel-header-left { display: flex; align-items: center; gap: 12px; }
+    .panel-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-mid) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .panel-header-text h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--sec-title);
+    }
+    .panel-header-text p {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 1px;
+    }
+    .panel-logout {
+      padding: 7px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      font-size: 13px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .panel-logout:hover { border-color: var(--accent); color: var(--sec-title); }
+
+    /* Cards */
+    .panel-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .pcard {
+      background: var(--sec-bg);
+      border: 1px solid var(--sec-border);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .pcard-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--dim);
+      margin-bottom: 8px;
+    }
+    .pcard-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--sec-title);
+      line-height: 1;
+    }
+    .pcard-sub {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+    .pcard-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pcard-badge.active  { background: rgba(74,222,128,.1); color: #4ade80; }
+    .pcard-badge.expired { background: rgba(192,57,43,.12); color: #e05c4f; }
+    .pcard-badge.dot::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Sections */
+    .panel-section {
+      background: var(--sec-bg);
+      border: 1px solid var(--sec-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .panel-section-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--sec-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .panel-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--sec-title);
+    }
+    .panel-section-body { padding: 20px; }
+
+    /* Info rows */
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border2);
+    }
+    .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .info-row:first-child { padding-top: 0; }
+    .info-row-label { font-size: 13px; color: var(--dim); }
+    .info-row-val {
+      font-size: 13px;
+      color: var(--sec-title);
+      font-weight: 500;
+      text-align: right;
+      word-break: break-all;
+    }
+    .info-row-val.mono {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: .02em;
+    }
+
+    /* HWID section */
+    .hwid-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .hwid-val {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--dim);
+      background: var(--win-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .hwid-reset-btn {
+      padding: 7px 16px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent-bright);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .hwid-reset-btn:hover { background: rgba(90,40,255,.15); }
+    .hwid-reset-btn:disabled { opacity: .45; cursor: not-allowed; }
+    .hwid-note {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    /* Download */
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .download-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--sec-title);
+    }
+    .download-info p {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 3px;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .download-btn:hover { background: var(--accent-mid); }
+    .download-btn svg { flex-shrink: 0; }
+
+    /* Status msg */
+    .panel-msg {
+      font-size: 13px;
+      padding: 9px 14px;
+      border-radius: 7px;
+      margin-top: 10px;
+    }
+    .panel-msg.success { background: rgba(74,222,128,.08); color: #4ade80; border: 1px solid rgba(74,222,128,.2); }
+    .panel-msg.error   { background: rgba(192,57,43,.08);  color: #e05c4f; border: 1px solid rgba(192,57,43,.2); }
+    [hidden] { display: none !important; }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, var(--border) 25%, var(--border2) 50%, var(--border) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+      height: 16px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <svg width="18" height="18" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+      <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+      <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+    </svg>
+    <span class="nav-name">Nocturn</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="#" id="navLogoutLink" hidden>Log out</a></li>
+  </ul>
+</nav>
+
+<div class="panel-wrap">
+
+  <!-- Gate: not logged in -->
+  <div class="panel-gate" id="panelGate">
+    <div class="panel-gate-icon">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--accent-mid)">
+        <path d="M18 8h-1V6A5 5 0 0 0 7 6v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3.1-9H8.9V6a3.1 3.1 0 1 1 6.2 0v2z"/>
+      </svg>
+    </div>
+    <h2>Sign in to your account</h2>
+    <p>Access your license info, download the loader, and manage your HWID from here.</p>
+    <button class="panel-gate-btn" id="gateLoginBtn">Sign in</button>
+  </div>
+
+  <!-- Dashboard: logged in -->
+  <div class="panel-dashboard" id="panelDashboard" hidden>
+
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <div class="panel-avatar" id="panelAvatar">—</div>
+        <div class="panel-header-text">
+          <h2 id="panelUsername">—</h2>
+          <p>Nocturn customer</p>
+        </div>
+      </div>
+      <button class="panel-logout" id="panelLogoutBtn">Log out</button>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="panel-cards" id="panelCards">
+      <div class="pcard">
+        <div class="pcard-label">Status</div>
+        <div id="cardStatus"><div class="skeleton" style="width:80px;height:22px"></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-label">Subscription</div>
+        <div class="pcard-value" id="cardSub"><div class="skeleton" style="width:100px;height:22px"></div></div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-label">Expires</div>
+        <div class="pcard-value" id="cardExpiry" style="font-size:15px"><div class="skeleton" style="width:120px;height:22px"></div></div>
+        <div class="pcard-sub" id="cardDaysLeft"></div>
+      </div>
+    </div>
+
+    <!-- License info -->
+    <div class="panel-section">
+      <div class="panel-section-head">
+        <span class="panel-section-title">License details</span>
+      </div>
+      <div class="panel-section-body">
+        <div class="info-row">
+          <span class="info-row-label">Username</span>
+          <span class="info-row-val" id="infoUsername">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Email</span>
+          <span class="info-row-val" id="infoEmail">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Subscription</span>
+          <span class="info-row-val" id="infoSub">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Expires</span>
+          <span class="info-row-val" id="infoExpiry">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Last login</span>
+          <span class="info-row-val" id="infoLastLogin">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-row-label">Created</span>
+          <span class="info-row-val" id="infoCreated">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HWID -->
+    <div class="panel-section">
+      <div class="panel-section-head">
+        <span class="panel-section-title">Hardware ID</span>
+      </div>
+      <div class="panel-section-body">
+        <div class="hwid-row">
+          <div class="hwid-val" id="hwidDisplay">—</div>
+          <button class="hwid-reset-btn" id="hwidResetBtn">Reset HWID</button>
+        </div>
+        <div class="panel-msg" id="hwidMsg" hidden></div>
+        <p class="hwid-note">Your HWID is locked to the machine you first logged in on. Reset it here when switching computers. Resets may be limited by your subscription.</p>
+      </div>
+    </div>
+
+    <!-- Download -->
+    <div class="panel-section">
+      <div class="panel-section-head">
+        <span class="panel-section-title">Loader</span>
+      </div>
+      <div class="panel-section-body">
+        <div class="download-row">
+          <div class="download-info">
+            <h3>Nocturn Loader</h3>
+            <p>Latest version — always keep it up to date before launching CS2.</p>
+          </div>
+          <a href="#" class="download-btn" id="downloadBtn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Auth Modal (same as main site) -->
+<div class="auth-overlay" id="authOverlay" hidden>
+  <div class="auth-modal" id="authModal">
+    <button class="checkout-close" id="authClose" aria-label="Close">&times;</button>
+    <div class="auth-header">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+        <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+        <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+      </svg>
+      <span class="checkout-brand">Nocturn</span>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="login">Login</button>
+      <button class="auth-tab" data-auth="register">Register</button>
+    </div>
+    <form class="auth-form" id="loginForm" autocomplete="off">
+      <div class="auth-field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" name="username" placeholder="Enter username" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="loginPass">Password</label>
+        <input type="password" id="loginPass" name="password" placeholder="Enter password" autocomplete="off" required>
+      </div>
+      <div class="auth-msg" id="loginMsg" hidden></div>
+      <button type="submit" class="checkout-pay-btn" id="loginSubmit">
+        <span>Login</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </form>
+    <form class="auth-form" id="registerForm" autocomplete="off" hidden>
+      <div class="auth-field">
+        <label for="regUser">Username</label>
+        <input type="text" id="regUser" name="username" placeholder="Choose a username" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="regPass">Password</label>
+        <input type="password" id="regPass" name="password" placeholder="Choose a password" autocomplete="off" required>
+      </div>
+      <div class="auth-field">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" name="email" placeholder="Enter your email" autocomplete="off" required>
+      </div>
+      <div class="auth-msg" id="registerMsg" hidden></div>
+      <button type="submit" class="checkout-pay-btn" id="registerSubmit">
+        <span>Create Account</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script src="panel.js"></script>
+</body>
+</html>

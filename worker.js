@@ -22,7 +22,7 @@ const CORS = {
 
 // Only these action types are forwarded — prevents the proxy from
 // being used as a general-purpose KeyAuth relay.
-const ALLOWED_ACTIONS = new Set(['login', 'register']);
+const ALLOWED_ACTIONS = new Set(['login', 'register', 'info', 'resetuser']);
 
 export default {
   async fetch(request, env) {
@@ -73,6 +73,22 @@ export default {
       params.set('pass',     body.pass);
       params.set('key',      '');
       if (body.email) params.set('email', body.email);
+    }
+
+    if (type === 'info') {
+      if (!body.username || !body.pass || !body.hwid) {
+        return json({ success: false, message: 'Missing info fields' }, 400);
+      }
+      params.set('username', body.username);
+      params.set('pass',     body.pass);
+      params.set('hwid',     body.hwid);
+    }
+
+    if (type === 'resetuser') {
+      if (!body.username) {
+        return json({ success: false, message: 'Missing username' }, 400);
+      }
+      params.set('username', body.username);
     }
 
     let upstream;
