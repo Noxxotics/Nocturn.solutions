@@ -2,7 +2,7 @@
 // Talks to the Cloudflare Worker proxy (same as main site).
 // Update PROXY_URL to your deployed worker URL.
 
-const PROXY_URL = 'https://nocturn-auth.YOUR-SUBDOMAIN.workers.dev';
+const PROXY_URL = 'https://nocturn-solutions.noxxotics.workers.dev';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 

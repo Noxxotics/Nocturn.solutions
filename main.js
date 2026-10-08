@@ -343,7 +343,7 @@ document.addEventListener('keydown', e => {
 // ── Auth Modal ──────────────────────────────────────────────────────
 // Requests go to the Cloudflare Worker proxy — credentials never leave the worker.
 // Deploy worker.js to Cloudflare Workers and set PROXY_URL to your worker's URL.
-const PROXY_URL = 'https://nocturn-auth.YOUR-SUBDOMAIN.workers.dev';
+const PROXY_URL = 'https://nocturn-solutions.noxxotics.workers.dev';
 const authOverlay   = document.getElementById('authOverlay');
 const authClose     = document.getElementById('authClose');
 const loginForm     = document.getElementById('loginForm');
