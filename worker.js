@@ -1,15 +1,9 @@
 /**
  * Nocturn — KeyAuth proxy worker
- * Deploy to Cloudflare Workers. Set these as Worker secrets (not env vars):
+ * Deploy to Cloudflare Workers. Set these as Worker secrets:
  *   KEYAUTH_NAME    = Vanta
  *   KEYAUTH_OWNERID = htid7JIX5o
  *   KEYAUTH_VER     = 1.0
- *
- * wrangler secret put KEYAUTH_NAME
- * wrangler secret put KEYAUTH_OWNERID
- * wrangler secret put KEYAUTH_VER
- *
- * Then update PROXY_URL in main.js to your worker's URL.
  */
 
 const KEYAUTH_API = 'https://keyauth.win/api/1.3/';
@@ -20,13 +14,27 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-// Only these action types are forwarded — prevents the proxy from
-// being used as a general-purpose KeyAuth relay.
 const ALLOWED_ACTIONS = new Set(['login', 'register', 'info', 'resetuser']);
+
+async function keyauthGet(params) {
+  const res = await fetch(`${KEYAUTH_API}?${params.toString()}`, { method: 'GET' });
+  return res.json();
+}
+
+async function getSessionId(env) {
+  const params = new URLSearchParams({
+    type:    'init',
+    ver:     env.KEYAUTH_VER,
+    name:    env.KEYAUTH_NAME,
+    ownerid: env.KEYAUTH_OWNERID,
+  });
+  const data = await keyauthGet(params);
+  if (!data.sessionid) throw new Error('Init failed: ' + (data.message || 'no sessionid'));
+  return data.sessionid;
+}
 
 export default {
   async fetch(request, env) {
-    // Preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: CORS });
     }
@@ -48,12 +56,20 @@ export default {
       return json({ success: false, message: 'Action not permitted' }, 403);
     }
 
-    // Build the KeyAuth payload — credentials injected here, never in the browser
+    // Step 1: init to get sessionid
+    let sessionid;
+    try {
+      sessionid = await getSessionId(env);
+    } catch (err) {
+      return json({ success: false, message: 'Auth init failed: ' + err.message }, 502);
+    }
+
+    // Step 2: build the action request with sessionid
     const params = new URLSearchParams({
       type,
+      sessionid,
       name:    env.KEYAUTH_NAME,
       ownerid: env.KEYAUTH_OWNERID,
-      ver:     env.KEYAUTH_VER,
     });
 
     if (type === 'login') {
@@ -71,7 +87,7 @@ export default {
       }
       params.set('username', body.username);
       params.set('pass',     body.pass);
-      params.set('key',      '');
+      params.set('key',      body.key || '');
       if (body.email) params.set('email', body.email);
     }
 
@@ -91,17 +107,12 @@ export default {
       params.set('username', body.username);
     }
 
-    let upstream;
     try {
-      upstream = await fetch(`${KEYAUTH_API}?${params.toString()}`, {
-        method: 'GET',
-      });
+      const data = await keyauthGet(params);
+      return json(data);
     } catch (err) {
       return json({ success: false, message: 'Could not reach auth server' }, 502);
     }
-
-    const data = await upstream.json();
-    return json(data, upstream.ok ? 200 : upstream.status);
   },
 };
 
