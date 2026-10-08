@@ -115,7 +115,9 @@ function showDashboard(session) {
   // Loader download link — update href to your real loader URL
   downloadBtn.href = session.loaderUrl || '#';
 
-  // Fetch live info from KeyAuth
+  // Populate from cached login info immediately, then refresh live
+  if (session.info) populateInfo(session.info);
+  else populateInfoFallback();
   fetchInfo(session.username, session.pass);
 }
 
@@ -123,13 +125,14 @@ async function fetchInfo(username, pass) {
   try {
     const r = await proxyPost({ type: 'info', username, pass, hwid: hwid() });
     if (r.success) {
-      populateInfo(r.info || r);
-    } else {
-      // session may have expired — show what we have cached
-      populateInfoFallback();
+      const info = r.info || r;
+      populateInfo(info);
+      // cache the fresh info in session
+      const session = getSession();
+      if (session) setSession({ ...session, info });
     }
   } catch {
-    populateInfoFallback();
+    // silent — already populated from cache above
   }
 }
 
@@ -211,7 +214,7 @@ loginForm?.addEventListener('submit', async e => {
     const r = await proxyPost({ type: 'login', username: u, pass: p, hwid: hwid() });
     if (r.success) {
       const sub = r.info?.subscriptions?.[0]?.subscription || 'Active';
-      setSession({ username: u, pass: p, subscriptions: sub });
+      setSession({ username: u, pass: p, subscriptions: sub, info: r.info || null });
       closeAuth();
       showDashboard(getSession());
     } else {
