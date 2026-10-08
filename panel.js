@@ -17,8 +17,11 @@ function hwid() {
 
 function getSession() {
   try {
-    return JSON.parse(localStorage.getItem('nc_user')) ||
-           JSON.parse(sessionStorage.getItem('nc_user'));
+    const ls = localStorage.getItem('nc_user');
+    if (ls) return JSON.parse(ls);
+    const ss = sessionStorage.getItem('nc_user');
+    if (ss) return JSON.parse(ss);
+    return null;
   } catch { return null; }
 }
 
@@ -392,6 +395,9 @@ hwidResetBtn?.addEventListener('click', () => {
 
 (function init() {
   const session = getSession();
-  if (session) showDashboard(session);
-  else showGate();
+  if (session && session.username) showDashboard(session);
+  else {
+    clearSession(); // wipe any malformed old session
+    showGate();
+  }
 })();
