@@ -12,7 +12,7 @@
  * Then update PROXY_URL in main.js to your worker's URL.
  */
 
-const KEYAUTH_API = 'https://keyauth.cc/api/1.3/';
+const KEYAUTH_API = 'https://keyauth.win/api/1.3/';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -93,10 +93,8 @@ export default {
 
     let upstream;
     try {
-      upstream = await fetch(KEYAUTH_API, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body:    params,
+      upstream = await fetch(`${KEYAUTH_API}?${params.toString()}`, {
+        method: 'GET',
       });
     } catch (err) {
       return json({ success: false, message: 'Could not reach auth server' }, 502);
