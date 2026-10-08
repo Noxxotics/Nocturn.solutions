@@ -484,6 +484,45 @@ authLogoutBtn?.addEventListener('click', () => {
   sessionStorage.removeItem('nc_user');
   showAuthForm('login');
   loginMsg.textContent = '';
+  updateNavAuth();
 });
+
+// ── Nav auth state ────────────────────────────────────────────────────────
+function updateNavAuth() {
+  const session = (() => {
+    try { return JSON.parse(sessionStorage.getItem('nc_user')); } catch { return null; }
+  })();
+
+  const navAuthItem       = document.getElementById('navAuthItem');
+  const navGetStarted     = document.getElementById('navGetStarted');
+  const navMobileAuth     = document.getElementById('navMobileAuth');
+  const navMobileGetStarted = document.getElementById('navMobileGetStarted');
+
+  if (session?.username) {
+    // Logged in — show username linking to panel, hide "Get started"
+    if (navAuthItem) navAuthItem.innerHTML =
+      `<a href="/panel.html" class="nav-auth-btn logged-in">
+        <span class="nav-avatar">${session.username.charAt(0).toUpperCase()}</span>
+        ${session.username}
+      </a>`;
+    if (navGetStarted) navGetStarted.hidden = true;
+    if (navMobileAuth) {
+      navMobileAuth.href = '/panel.html';
+      navMobileAuth.textContent = session.username;
+    }
+    if (navMobileGetStarted) navMobileGetStarted.hidden = true;
+  } else {
+    // Logged out — restore defaults
+    if (navAuthItem) navAuthItem.innerHTML = `<a href="/panel.html" class="nav-auth-btn">Sign in</a>`;
+    if (navGetStarted) navGetStarted.hidden = false;
+    if (navMobileAuth) {
+      navMobileAuth.href = '/panel.html';
+      navMobileAuth.textContent = 'Sign in';
+    }
+    if (navMobileGetStarted) navMobileGetStarted.hidden = false;
+  }
+}
+
+updateNavAuth();
 
 }); // DOMContentLoaded
