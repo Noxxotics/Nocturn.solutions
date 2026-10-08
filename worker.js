@@ -101,10 +101,11 @@ export default {
     }
 
     if (type === 'resetuser') {
-      if (!body.username) {
-        return json({ success: false, message: 'Missing username' }, 400);
+      if (!body.username || !body.pass) {
+        return json({ success: false, message: 'Missing credentials' }, 400);
       }
       params.set('username', body.username);
+      params.set('pass',     body.pass);
     }
 
     try {

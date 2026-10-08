@@ -23,7 +23,9 @@ function getSession() {
 }
 
 function setSession(data, remember) {
-  const str = JSON.stringify(data);
+  // Never store password — only username, subscriptions, and cached info
+  const safe = { username: data.username, subscriptions: data.subscriptions, info: data.info || null };
+  const str = JSON.stringify(safe);
   if (remember) {
     localStorage.setItem('nc_user', str);
     sessionStorage.removeItem('nc_user');
@@ -94,6 +96,7 @@ const hwidResetBtn   = document.getElementById('hwidResetBtn');
 const hwidMsg        = document.getElementById('hwidMsg');
 
 const downloadBtn    = document.getElementById('downloadBtn');
+const refreshBtn     = document.getElementById('refreshInfoBtn');
 
 // Auth modal
 const authOverlay    = document.getElementById('authOverlay');
@@ -102,6 +105,12 @@ const loginForm      = document.getElementById('loginForm');
 const registerForm   = document.getElementById('registerForm');
 const loginMsg       = document.getElementById('loginMsg');
 const registerMsg    = document.getElementById('registerMsg');
+
+// Re-auth modal
+const reauthOverlay  = document.getElementById('reauthOverlay');
+const reauthForm     = document.getElementById('reauthForm');
+const reauthMsg      = document.getElementById('reauthMsg');
+const reauthClose    = document.getElementById('reauthClose');
 
 // ── Panel render ──────────────────────────────────────────────────────────
 
@@ -116,47 +125,37 @@ function showDashboard(session) {
   panelDashboard.hidden = false;
   navLogoutLink.hidden  = false;
 
-  // Header
-  panelAvatar.textContent  = initials(session.username);
+  panelAvatar.textContent   = initials(session.username);
   panelUsername.textContent = session.username;
+  hwidDisplay.textContent   = hwid();
+  downloadBtn.href          = session.loaderUrl || '#';
 
-  // HWID display
-  hwidDisplay.textContent = hwid();
-
-  // Loader download link — update href to your real loader URL
-  downloadBtn.href = session.loaderUrl || '#';
-
-  // Populate from cached login info immediately, then refresh live
   if (session.info) populateInfo(session.info);
   else populateInfoFallback();
-  fetchInfo(session.username, session.pass);
 }
 
-async function fetchInfo(username, pass) {
-  try {
-    const r = await proxyPost({ type: 'info', username, pass, hwid: hwid() });
-    if (r.success) {
-      const info = r.info || r;
-      populateInfo(info);
-      // cache the fresh info in session
-      const session = getSession();
-      const persisted = !!localStorage.getItem('nc_user');
-      if (session) setSession({ ...session, info }, persisted);
-    }
-  } catch {
-    // silent — already populated from cache above
+// ── Info fetch (requires password via re-auth) ────────────────────────────
+
+async function fetchInfoWithPass(username, pass) {
+  const r = await proxyPost({ type: 'info', username, pass, hwid: hwid() });
+  if (r.success) {
+    const info = r.info || r;
+    populateInfo(info);
+    const session = getSession();
+    const persisted = !!localStorage.getItem('nc_user');
+    if (session) setSession({ ...session, info }, persisted);
+    return { success: true };
   }
+  return { success: false, message: r.message || 'Failed to load info.' };
 }
 
 function populateInfo(info) {
-  // Subscriptions array — pick first active one
   const sub = info.subscriptions?.[0];
   const subName  = sub?.subscription || 'Active';
   const expiryEp = sub?.expiry;
   const expired  = sub?.expired === true || sub?.expired === 'true';
   const days     = daysLeft(expiryEp);
 
-  // Stat cards
   const badgeCls = expired ? 'expired' : 'active';
   const badgeTxt = expired ? 'Expired' : 'Active';
   cardStatus.innerHTML = `<span class="pcard-badge ${badgeCls} dot">${badgeTxt}</span>`;
@@ -166,7 +165,6 @@ function populateInfo(info) {
     cardDaysLeft.textContent = days <= 0 ? 'Expires today' : `${days} day${days !== 1 ? 's' : ''} left`;
   }
 
-  // Detail rows
   infoUsername.textContent  = info.username   || '—';
   infoEmail.textContent     = info.email      || '—';
   infoSub.textContent       = subName;
@@ -182,6 +180,78 @@ function populateInfoFallback() {
   cardExpiry.textContent = '—';
   infoUsername.textContent = session?.username || '—';
 }
+
+// ── Re-auth modal ─────────────────────────────────────────────────────────
+// Used for Refresh info and HWID reset — prompts password since we don't store it
+
+let reauthCallback = null; // function(pass) to call after re-auth
+
+function openReauth(onSuccess) {
+  reauthCallback = onSuccess;
+  reauthMsg.hidden = true;
+  reauthForm.reset();
+  reauthOverlay.hidden = false;
+  document.body.style.overflow = 'hidden';
+  reauthForm.querySelector('[name=reauth_pass]')?.focus();
+}
+
+function closeReauth() {
+  reauthOverlay.hidden = true;
+  document.body.style.overflow = '';
+  reauthCallback = null;
+}
+
+reauthClose?.addEventListener('click', closeReauth);
+reauthOverlay?.addEventListener('click', e => { if (e.target === reauthOverlay) closeReauth(); });
+
+reauthForm?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const pass = reauthForm.querySelector('[name=reauth_pass]').value;
+  const btn  = reauthForm.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+  reauthMsg.hidden = true;
+
+  const session = getSession();
+  if (!session) { closeReauth(); return; }
+
+  // Verify password by attempting a login
+  try {
+    const r = await proxyPost({ type: 'login', username: session.username, pass, hwid: hwid() });
+    if (r.success) {
+      closeReauth();
+      if (reauthCallback) await reauthCallback(pass);
+    } else {
+      reauthMsg.textContent = 'Invalid password.';
+      reauthMsg.className   = 'auth-msg error';
+      reauthMsg.hidden      = false;
+    }
+  } catch {
+    reauthMsg.textContent = 'Connection error — try again.';
+    reauthMsg.className   = 'auth-msg error';
+    reauthMsg.hidden      = false;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Confirm';
+});
+
+// ── Refresh info button ───────────────────────────────────────────────────
+
+refreshBtn?.addEventListener('click', () => {
+  const session = getSession();
+  if (!session) return;
+  openReauth(async (pass) => {
+    refreshBtn.disabled = true;
+    refreshBtn.textContent = 'Refreshing…';
+    const result = await fetchInfoWithPass(session.username, pass);
+    if (!result.success) {
+      // silently fall back to cached
+    }
+    refreshBtn.disabled  = false;
+    refreshBtn.textContent = 'Refresh';
+  });
+});
 
 // ── Auth modal ────────────────────────────────────────────────────────────
 
@@ -209,7 +279,12 @@ function setMsg(el, text, isError) {
 gateLoginBtn?.addEventListener('click', () => openAuth('login'));
 authClose?.addEventListener('click', closeAuth);
 authOverlay?.addEventListener('click', e => { if (e.target === authOverlay) closeAuth(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !authOverlay?.hidden) closeAuth(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!authOverlay?.hidden) closeAuth();
+    if (!reauthOverlay?.hidden) closeReauth();
+  }
+});
 document.querySelectorAll('.auth-tab').forEach(btn => {
   btn.addEventListener('click', () => openAuth(btn.dataset.auth));
 });
@@ -227,11 +302,12 @@ loginForm?.addEventListener('submit', async e => {
     const r = await proxyPost({ type: 'login', username: u, pass: p, hwid: hwid() });
     if (r.success) {
       const sub = r.info?.subscriptions?.[0]?.subscription || 'Active';
-      setSession({ username: u, pass: p, subscriptions: sub, info: r.info || null }, remember);
+      // Password never stored — only username, sub tier, and cached info
+      setSession({ username: u, subscriptions: sub, info: r.info || null }, remember);
       closeAuth();
       showDashboard(getSession());
     } else {
-      setMsg(loginMsg, r.message || 'Login failed.', true);
+      setMsg(loginMsg, r.message || 'Invalid credentials.', true);
     }
   } catch {
     setMsg(loginMsg, 'Connection error — try again.', true);
@@ -253,7 +329,7 @@ registerForm?.addEventListener('submit', async e => {
   try {
     const r = await proxyPost({ type: 'register', username: u, pass: p, key, email: em });
     if (r.success) {
-      setSession({ username: u, pass: p, subscriptions: 'Active' });
+      setSession({ username: u, subscriptions: 'Active' });
       closeAuth();
       showDashboard(getSession());
     } else {
@@ -276,49 +352,46 @@ function logout() {
 panelLogoutBtn?.addEventListener('click', logout);
 navLogoutLink?.addEventListener('click', e => { e.preventDefault(); logout(); });
 
-// ── HWID reset ────────────────────────────────────────────────────────────
+// ── HWID reset (requires re-auth) ────────────────────────────────────────
 
-hwidResetBtn?.addEventListener('click', async () => {
+hwidResetBtn?.addEventListener('click', () => {
   const session = getSession();
   if (!session) return;
 
-  hwidResetBtn.disabled = true;
-  hwidResetBtn.textContent = 'Resetting…';
-  hwidMsg.hidden = true;
+  openReauth(async (pass) => {
+    hwidResetBtn.disabled    = true;
+    hwidResetBtn.textContent = 'Resetting…';
+    hwidMsg.hidden = true;
 
-  try {
-    const r = await proxyPost({ type: 'resetuser', username: session.username });
-    if (r.success) {
-      // Generate new HWID and store it
-      const newId = crypto.randomUUID();
-      localStorage.setItem('nc_hwid', newId);
-      hwidDisplay.textContent = newId;
-
-      hwidMsg.textContent = 'HWID reset — your next login will register this machine.';
-      hwidMsg.className   = 'panel-msg success';
-      hwidMsg.hidden      = false;
-    } else {
-      hwidMsg.textContent = r.message || 'Reset failed. Try again or contact support.';
+    try {
+      const r = await proxyPost({ type: 'resetuser', username: session.username, pass });
+      if (r.success) {
+        const newId = crypto.randomUUID();
+        localStorage.setItem('nc_hwid', newId);
+        hwidDisplay.textContent = newId;
+        hwidMsg.textContent = 'HWID reset — your next login will register this machine.';
+        hwidMsg.className   = 'panel-msg success';
+        hwidMsg.hidden      = false;
+      } else {
+        hwidMsg.textContent = r.message || 'Reset failed. Try again or contact support.';
+        hwidMsg.className   = 'panel-msg error';
+        hwidMsg.hidden      = false;
+      }
+    } catch {
+      hwidMsg.textContent = 'Connection error. Try again.';
       hwidMsg.className   = 'panel-msg error';
       hwidMsg.hidden      = false;
     }
-  } catch {
-    hwidMsg.textContent = 'Connection error. Try again.';
-    hwidMsg.className   = 'panel-msg error';
-    hwidMsg.hidden      = false;
-  }
 
-  hwidResetBtn.disabled    = false;
-  hwidResetBtn.textContent = 'Reset HWID';
+    hwidResetBtn.disabled    = false;
+    hwidResetBtn.textContent = 'Reset HWID';
+  });
 });
 
 // ── Init ──────────────────────────────────────────────────────────────────
 
 (function init() {
   const session = getSession();
-  if (session) {
-    showDashboard(session);
-  } else {
-    showGate();
-  }
+  if (session) showDashboard(session);
+  else showGate();
 })();

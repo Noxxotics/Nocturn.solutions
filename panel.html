@@ -12,6 +12,26 @@
   <link rel="stylesheet" href="style.css">
   <style>
     /* ── Panel-specific styles ────────────────────────────────────── */
+    .panel-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .panel-refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--dim);
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .panel-refresh-btn:hover { border-color: var(--accent); color: var(--accent-bright); }
+    .panel-refresh-btn:disabled { opacity: .45; cursor: not-allowed; }
     .auth-remember {
       display: flex;
       align-items: center;
@@ -388,6 +408,10 @@
     <div class="panel-section">
       <div class="panel-section-head">
         <span class="panel-section-title">License details</span>
+        <button class="panel-refresh-btn" id="refreshInfoBtn" title="Refresh live data">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Refresh
+        </button>
       </div>
       <div class="panel-section-body">
         <div class="info-row">
@@ -511,6 +535,30 @@
         <span>Create Account</span>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
       </button>
+    </form>
+  </div>
+</div>
+
+<!-- Re-auth modal — verify password before sensitive actions -->
+<div class="auth-overlay" id="reauthOverlay" hidden>
+  <div class="auth-modal" id="reauthModal" style="max-width:380px">
+    <button class="checkout-close" id="reauthClose" aria-label="Close">&times;</button>
+    <div class="auth-header">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="9" fill="#c4b5fd"/>
+        <circle cx="19.5" cy="11.5" r="7.5" fill="#06060c"/>
+        <circle cx="25" cy="7" r="1.6" fill="rgba(196,181,253,.8)"/>
+      </svg>
+      <span class="checkout-brand">Confirm identity</span>
+    </div>
+    <p style="font-size:13px;color:var(--dim);margin-bottom:16px">Enter your password to continue.</p>
+    <form class="auth-form" id="reauthForm" autocomplete="off">
+      <div class="auth-field">
+        <label for="reauthPass">Password</label>
+        <input type="password" id="reauthPass" name="reauth_pass" placeholder="Enter your password" autocomplete="current-password" required>
+      </div>
+      <div class="auth-msg" id="reauthMsg" hidden></div>
+      <button type="submit" class="checkout-pay-btn">Confirm</button>
     </form>
   </div>
 </div>
