@@ -12,7 +12,7 @@
  * Then update PROXY_URL in main.js to your worker's URL.
  */
 
-const KEYAUTH_API = 'https://keyauth.win/api/1.3/';
+const KEYAUTH_API = 'https://keyauth.cc/api/1.3/';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
