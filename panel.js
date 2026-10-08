@@ -230,11 +230,12 @@ registerForm?.addEventListener('submit', async e => {
   const u   = registerForm.querySelector('[name=username]').value.trim();
   const p   = registerForm.querySelector('[name=password]').value;
   const em  = registerForm.querySelector('[name=email]').value.trim();
+  const key = registerForm.querySelector('[name=key]').value.trim();
   const btn = document.getElementById('registerSubmit');
   btn.disabled = true;
   btn.querySelector('span').textContent = 'Registering…';
   try {
-    const r = await proxyPost({ type: 'register', username: u, pass: p, key: '', email: em });
+    const r = await proxyPost({ type: 'register', username: u, pass: p, key, email: em });
     if (r.success) {
       setSession({ username: u, pass: p, subscriptions: 'Active' });
       closeAuth();
