@@ -27,7 +27,7 @@ function getSession() {
 
 function setSession(data, remember) {
   // Never store password — only username, subscriptions, and cached info
-  const safe = { username: data.username, subscriptions: data.subscriptions, info: data.info || null };
+  const safe = { username: data.username, subscriptions: data.subscriptions, info: data.info || null, loaderUrl: data.loaderUrl || null };
   const str = JSON.stringify(safe);
   if (remember) {
     localStorage.setItem('nc_user', str);
@@ -131,7 +131,7 @@ function showDashboard(session) {
   panelAvatar.textContent   = initials(session.username);
   panelUsername.textContent = session.username;
   hwidDisplay.textContent   = hwid();
-  downloadBtn.href          = 'https://pub-2ebcc2ab386a4c4bb9c4526347f73b09.r2.dev/cs2-external-esp.exe';
+  downloadBtn.href          = session.loaderUrl || 'https://pub-2ebcc2ab386a4c4bb9c4526347f73b09.r2.dev/cs2-external-esp.exe';
   downloadBtn.setAttribute('download', 'NocturnLoader.exe');
 
   if (session.info) populateInfo(session.info);
@@ -306,8 +306,11 @@ loginForm?.addEventListener('submit', async e => {
     const r = await proxyPost({ type: 'login', username: u, pass: p, hwid: hwid() });
     if (r.success) {
       const sub = r.info?.subscriptions?.[0]?.subscription || 'Active';
-      // Password never stored — only username, sub tier, and cached info
-      setSession({ username: u, subscriptions: sub, info: r.info || null }, remember);
+      const vars = Array.isArray(r.variables) ? r.variables : [];
+      const loaderVar = vars.find(v => v.name === 'loader_url');
+      const loaderUrl = loaderVar?.data || 'https://pub-2ebcc2ab386a4c4bb9c4526347f73b09.r2.dev/cs2-external-esp.exe';
+      // Password never stored — only username, sub tier, cached info, and loader URL
+      setSession({ username: u, subscriptions: sub, info: r.info || null, loaderUrl }, remember);
       closeAuth();
       showDashboard(getSession());
     } else {
