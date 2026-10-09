@@ -131,7 +131,8 @@ function showDashboard(session) {
   panelAvatar.textContent   = initials(session.username);
   panelUsername.textContent = session.username;
   hwidDisplay.textContent   = hwid();
-  downloadBtn.href          = session.loaderUrl || '#';
+  downloadBtn.href          = 'https://pub-2ebcc2ab386a4c4bb9c4526347f73b09.r2.dev/cs2-external-esp.exe';
+  downloadBtn.setAttribute('download', 'NocturnLoader.exe');
 
   if (session.info) populateInfo(session.info);
   else populateInfoFallback();
